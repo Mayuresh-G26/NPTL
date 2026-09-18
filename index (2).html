@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sustainable Happiness - MCQ Mock Test</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .soft-shadow { box-shadow: 0 12px 35px rgba(30, 64, 175, .08); }
+  .option-card { transition: .18s ease; }
+  .option-card:hover { transform: translateY(-1px); border-color:#3b82f6; background:#f8fbff; }
+  .palette-btn { transition:.15s ease; }
+  .palette-btn:hover { transform:translateY(-1px); }
+  .fade { animation:fade .2s ease; }
+  @keyframes fade { from {opacity:.35; transform:translateY(4px)} to {opacity:1; transform:none} }
+  .scrollbar::-webkit-scrollbar { width:6px; }
+  .scrollbar::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:10px; }
+</style>
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-800">
+<header class="h-20 bg-gradient-to-r from-slate-900 via-blue-900 to-blue-800 text-white flex items-center justify-between px-5 md:px-8">
+  <div class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl border-2 border-blue-300 flex items-center justify-center">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+    </div>
+    <div>
+      <h1 class="text-2xl md:text-3xl font-bold tracking-tight">MCQ Mock Test</h1>
+      <p class="text-blue-200 text-sm">Practice • Improve • Succeed</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-3">
+    <button id="darkToggle" onclick="toggleDark()" class="px-3 py-2 rounded-xl border border-blue-300/50 bg-white/10 text-sm hover:bg-white/20">🌙 Dark Mode</button>
+  </div>
+</header>
+
+<div class="flex min-h-[calc(100vh-80px)]">
+  <aside class="hidden lg:flex w-64 bg-white border-r border-slate-200 p-4 flex-col">
+    <nav class="space-y-2">
+      <button class="w-full flex items-center gap-4 px-5 py-4 rounded-xl bg-blue-50 text-blue-700 font-semibold">⌂ <span>Dashboard</span></button>
+      <button onclick="scrollToTop()" class="w-full flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-50">✎ <span>Take Test</span></button>
+      <button onclick="showResults()" class="w-full flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-50">▣ <span>Results</span></button>
+      <button onclick="resetTest()" class="w-full flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-50">↻ <span>Restart Test</span></button>
+      <button onclick="toggleDark()" class="w-full flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-slate-50">⚙ <span>Settings</span></button>
+    </nav>
+    <div class="mt-auto rounded-2xl bg-blue-50 p-5 text-center">
+      <div class="text-3xl mb-2">🎯</div>
+      <p class="font-semibold text-blue-900">Small Steps</p>
+      <p class="text-blue-700 text-sm">Make Big Progress</p>
+    </div>
+  </aside>
+
+  <main class="flex-1 p-4 md:p-7 overflow-hidden">
+    <div class="max-w-[1500px] mx-auto">
+      <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_360px] gap-5">
+        <section>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 mb-4 soft-shadow">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <div class="text-sm font-semibold text-blue-700">Sustainable Happiness</div>
+                <h2 class="text-2xl font-bold text-slate-900">NPTEL Assignment Mock Test</h2>
+                <p class="text-slate-500 text-sm mt-1">Weeks 1–8 • 80 Questions</p>
+              </div>
+              <select id="weekFilter" onchange="applyFilter()" class="rounded-xl border border-slate-300 px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="all">All Weeks — 80 Questions</option>
+                <option value="1">Week 1</option><option value="2">Week 2</option>
+                <option value="3">Week 3</option><option value="4">Week 4</option>
+                <option value="5">Week 5</option><option value="6">Week 6</option>
+                <option value="7">Week 7</option><option value="8">Week 8</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5 mb-4 soft-shadow">
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <div class="font-semibold text-slate-900" id="progressText">Question 1 of 80</div>
+              <button id="reviewBtn" onclick="toggleReview()" class="px-4 py-2 rounded-xl border border-slate-200 hover:border-blue-400 hover:text-blue-700 text-sm font-medium">☆ Mark for Review</button>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="h-2.5 bg-slate-200 rounded-full flex-1 overflow-hidden"><div id="progressBar" class="h-full bg-blue-600 rounded-full" style="width:1.25%"></div></div>
+              <span id="progressPct" class="text-sm font-semibold text-slate-600">1%</span>
+            </div>
+          </div>
+
+          <div id="questionCard" class="bg-white rounded-2xl border border-slate-200 p-5 md:p-7 soft-shadow fade">
+            <div class="flex flex-wrap justify-between items-center gap-3 mb-5">
+              <span id="weekBadge" class="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold">Week 1</span>
+              <span id="marksBadge" class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold">Marks: 1</span>
+            </div>
+
+            <h3 id="questionText" class="text-xl md:text-2xl font-bold leading-relaxed text-slate-900 mb-6"></h3>
+            <div id="options" class="space-y-3"></div>
+
+            <div id="feedback" class="hidden mt-5 rounded-xl border p-4"></div>
+
+            <div class="flex flex-wrap justify-between items-center gap-3 mt-7">
+              <button onclick="previousQuestion()" class="px-5 py-3 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">← Previous</button>
+              <div class="flex gap-2">
+                <button onclick="clearAnswer()" class="px-5 py-3 rounded-xl border border-slate-300 font-semibold hover:bg-slate-50">⌫ Clear Answer</button>
+                <button id="submitAnswerBtn" onclick="submitAnswer()" class="px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700">✓ Submit Answer</button>
+                <button id="nextBtn" onclick="nextQuestion()" class="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700">Next →</button>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap justify-between gap-3 mt-6 pt-4 border-t border-slate-100 text-sm text-slate-500">
+              <span>⌨ Use ← → arrow keys to navigate</span>
+              <label class="flex items-center gap-2"><input id="autoNext" type="checkbox" checked class="accent-blue-600"> Auto move to next question</label>
+            </div>
+          </div>
+        </section>
+
+        <aside>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 soft-shadow sticky top-5">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-bold text-slate-900">Question Palette</h3>
+              <span id="paletteWeek" class="text-xs font-semibold text-blue-600">ALL</span>
+            </div>
+            <div class="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-600 mt-4">
+              <span>🔵 Current</span><span>🟢 Answered</span><span>🟠 Review</span><span>⬜ Not Attempted</span>
+            </div>
+            <div id="palette" class="grid grid-cols-5 gap-2 mt-5 max-h-[390px] overflow-y-auto scrollbar pr-1"></div>
+
+            <hr class="my-5 border-slate-200">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Test Info</h3>
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between"><span>Total Questions</span><strong id="totalCount">80</strong></div>
+              <div class="flex justify-between"><span>Attempted</span><strong id="attemptedCount">0</strong></div>
+              <div class="flex justify-between"><span>Correct</span><strong id="correctCount">0</strong></div>
+              <div class="flex justify-between"><span>Wrong</span><strong id="wrongCount">0</strong></div>
+              <div class="flex justify-between"><span>Not Attempted</span><strong id="unattemptedCount">80</strong></div>
+            </div>
+
+            <button onclick="submitTest()" class="w-full mt-6 px-5 py-3.5 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700">✓ Submit Test</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="resultModal" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-3xl max-w-lg w-full p-7 soft-shadow">
+    <div class="text-center">
+      <div class="text-5xl mb-3">🎉</div>
+      <h2 class="text-3xl font-bold text-slate-900">Test Result</h2>
+      <p class="text-slate-500 mt-1">Sustainable Happiness • MCQ Mock Test</p>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mt-6">
+      <div class="rounded-2xl bg-blue-50 p-4 text-center"><div class="text-2xl font-bold text-blue-700" id="resultScore">0/80</div><div class="text-sm text-slate-500">Score</div></div>
+      <div class="rounded-2xl bg-slate-50 p-4 text-center"><div class="text-2xl font-bold" id="resultPct">0%</div><div class="text-sm text-slate-500">Percentage</div></div>
+      <div class="rounded-2xl bg-green-50 p-4 text-center"><div class="text-2xl font-bold text-green-700" id="resultCorrect">0</div><div class="text-sm text-slate-500">Correct</div></div>
+      <div class="rounded-2xl bg-red-50 p-4 text-center"><div class="text-2xl font-bold text-red-700" id="resultWrong">0</div><div class="text-sm text-slate-500">Wrong</div></div>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button onclick="closeResults()" class="flex-1 px-4 py-3 rounded-xl bg-slate-100 font-semibold">Close</button>
+      <button onclick="resetTest(); closeResults()" class="flex-1 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold">Restart Test</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const allQuestions = [{"week": 1, "q": "Which of the following is not true about sustainable happiness?", "o": ["It contributes to global wellbeing", "It improves individual wellbeing", "It does not harm future generations", "It exploits the environment"], "a": 3}, {"week": 1, "q": "In a globalized world, individual actions have repercussions only on immediate environments and not on distant lands and people.", "o": ["True", "False"], "a": 1}, {"week": 1, "q": "The concepts of happiness and sustainability must be combined to ___.", "o": ["differentiate between the two", "focus on their independence", "focus on their mutual interdependence", "shift the focus away from other important issues in the environment"], "a": 2}, {"week": 1, "q": "Sustainable happiness as a concept can be used by ___.", "o": ["individuals to guide actions and decisions", "community level to focus on collective indicators of wellbeing", "international level to highlight the importance of individual and collective action", "all of the given"], "a": 3}, {"week": 1, "q": "Self-sustainability and Self-sufficiency represent types of personal or collective ___.", "o": ["autonomy", "persuasion", "genetics", "none of the given"], "a": 0}, {"week": 1, "q": "Sustainable happiness is understood not only by global issues like poverty but also growing discontent since globalization.", "o": ["True", "False"], "a": 0}, {"week": 1, "q": "Sustainable happiness tackles the very idea that quality of life directly depends only on ___.", "o": ["material expansion", "lifelong responsibility", "deep spirituality", "socio-environmental care"], "a": 0}, {"week": 1, "q": "___ wellbeing is the type of happiness we get from pleasure.", "o": ["Helonic", "Eudaimonic", "Utopian", "Hedonic"], "a": 3}, {"week": 1, "q": "___ focuses on ‘we more than me’.", "o": ["Transparence", "Autonomy", "Transcendence", "None of the given"], "a": 2}, {"week": 1, "q": "The HPI is proposed by the New Economics Foundation which stands for ___.", "o": ["Happy Profit Index", "Happy Planet Index", "Happy People Index", "Happy Price Index"], "a": 1}, {"week": 2, "q": "The ___ was the first United Nations conference that combined issues of environment and development.", "o": ["Planet Summit", "India Summit", "Earth Summit", "Nature Summit"], "a": 2}, {"week": 2, "q": "Chapter 36 of Agenda 21 is devoted to the role of ___ for sustainable development.", "o": ["education", "health", "happiness", "economic growth"], "a": 0}, {"week": 2, "q": "If children are to be happy in schools, it does not matter if their teachers are happy or not.", "o": ["True", "False"], "a": 1}, {"week": 2, "q": "If formal educational institutions are to care for the whole person, experiences like ___ must be offered.", "o": ["Extra-curricular activities", "Community learning", "Accessible counselling", "All of the given"], "a": 3}, {"week": 2, "q": "Both ___ education and ___ education hold the same goal of increasing the wellbeing of the individual, the society, and the natural environment but that their starting points are opposite.", "o": ["natural, experiential", "positive, experiential", "natural, environmental", "environmental, positive"], "a": 3}, {"week": 2, "q": "The ___ development thinking is based on the Gross National Happiness/GNH happiness index.", "o": ["Bhutanese", "Indian", "American", "Australian"], "a": 0}, {"week": 2, "q": "In the ExConTra learning paradigm, acting is at the intersection of ___ and constructing.", "o": ["experiencing", "experimenting", "conceptualizing", "reflecting"], "a": 0}, {"week": 2, "q": "Students often learn more about a given environmental problem by ____.", "o": ["receiving lectures from the teachers", "rote-memorizing class notes", "reading about it from secondary sources like books and the internet", "wrestling with empirical data for themselves"], "a": 3}, {"week": 2, "q": "Happiness is associated with __.", "o": ["religion", "money", "health", "all of the given"], "a": 3}, {"week": 2, "q": "Being present and attentive purposefully and non-judgmentally ‘in the moment’ is known as ___.", "o": ["mindfulness", "consciousness", "transcendence", "autonomy"], "a": 0}, {"week": 3, "q": "Happy employees ___.", "o": ["Create happy customers", "Have less work-life stress", "Are more creative", "All of the above"], "a": 3}, {"week": 3, "q": "Happiness as a state of mind is dependent on how it is interpreted.", "o": ["True", "False"], "a": 0}, {"week": 3, "q": "According to the ___, work is one of the most important factors that influence happiness.", "o": ["relatable measure of wellbeing", "test of happiness", "sustainable index", "relative index of happiness"], "a": 3}, {"week": 3, "q": "Abraham Maslow has given the ___ Hierarchy Theory.", "o": ["need", "value", "emotion", "happiness"], "a": 0}, {"week": 3, "q": "___ sets expectations for how employees should behave and interact with one another as they perform their day-to-day responsibilities and contribute to the company’s overall mission.", "o": ["Work culture", "Work-life balance", "Work values", "Work-load"], "a": 0}, {"week": 3, "q": "People who feel unfulfilled at work are more likely to put effort into contributing toward company success.", "o": ["True", "False"], "a": 1}, {"week": 3, "q": "____ is the best way to help employees achieve their goals.", "o": ["Entitlement", "Empowerment", "Ignorance", "Hand-holding"], "a": 1}, {"week": 3, "q": "___ at work is initiated by a pain trigger and an expression of suffering by the sufferer.", "o": ["Compassion", "Love", "Friendship", "Psychological safety"], "a": 0}, {"week": 3, "q": "Which of the following is not a component of emotional intelligence?", "o": ["self-awareness", "self-regulation", "self-conflict", "social awareness"], "a": 2}, {"week": 3, "q": "___ competence is the ability to collectively develop and implement innovative actions that further sustainability at the local level and further afield.", "o": ["Collaboration", "Strategic", "Normative", "Integrated problem-solving"], "a": 1}, {"week": 4, "q": "The aim of sustainable organizations is to create ___ for the company shareholders, wider society and the environment.", "o": ["Long-term value", "Immediate returns", "Psychological benefits", "Investment opportunities"], "a": 0}, {"week": 4, "q": "Sustainability is now commonly understood to encompass the ___ bottom-line approach.", "o": ["single", "quadruple", "double", "triple"], "a": 3}, {"week": 4, "q": "A key aspect of sustainable organizations is that they are typically led by a governance model that values transparency and ___.", "o": ["accountability", "autonomy", "attentiveness", "assertiveness"], "a": 0}, {"week": 4, "q": "Which of the following is an example of CSR?", "o": ["engaging in philanthropic endeavors", "adopting humane employee practices", "caring for the environment", "all of the given"], "a": 3}, {"week": 4, "q": "Which of the following is a reason for companies to invest in CSR?", "o": ["reputation management", "to sustain profitability", "out of moral obligation", "all of the given"], "a": 3}, {"week": 4, "q": "G in ESG stands for ___.", "o": ["governance", "government", "green", "good"], "a": 0}, {"week": 4, "q": "___ is a sense of belonging in an environment where all feel welcomed, accepted, and respected.", "o": ["Inclusion", "Equality", "Diversity", "Equality"], "a": 0}, {"week": 4, "q": "Companies with diverse executive boards show a higher return on equity than those with homogenous boards.", "o": ["True", "False"], "a": 0}, {"week": 4, "q": "Which of the following is a challenge for sustainable organizations?", "o": ["Balancing cost with sustainability", "Resistance to change", "Supply chain complexity", "All of the above"], "a": 3}, {"week": 4, "q": "___ HRM refers to the HR practices anchored in the promotion, adoption, and implementation of environmentally sustainable practices which reflect in how the organization manages its people and utilizes their expertise.", "o": ["Green", "Yellow", "White", "None of the given"], "a": 0}, {"week": 5, "q": "Sustainable leaders ensure the delivery of results that meet ___ performance.", "o": ["Social", "Economic", "Environmental", "All of the given"], "a": 3}, {"week": 5, "q": "Eco-sensitive leadership, green leadership, and sustainability leadership are terms used in very different contexts with different meanings.", "o": ["True", "False"], "a": 1}, {"week": 5, "q": "Which of the following terms is not used interchangeably to link sustainable practices with leadership and management?", "o": ["eco-reductive leadership", "eco-sensitive leadership", "green leadership", "sustainable leadership"], "a": 0}, {"week": 5, "q": "Sustainability is viewed as a ___ which has close association with corporate governance.", "o": ["business strategy", "moral imperative", "forced responsibility", "none of the given"], "a": 0}, {"week": 5, "q": "Presencing refers to the combination of presence and ___.", "o": ["Sustainability", "Security", "Pretending", "Sensing"], "a": 3}, {"week": 5, "q": "By disclosing the bad news, as well as the good; sustainable leaders illustrate ___.", "o": ["Open-mindedness", "Autonomy", "Resilience", "Transparency"], "a": 3}, {"week": 5, "q": "Networking is an important quality for sustainable leaders.", "o": ["True", "False"], "a": 0}, {"week": 5, "q": "Extensive use of ___ is a critical element in the recruitment process for a sustainable leader.", "o": ["jargons", "social media", "symbols", "references"], "a": 3}, {"week": 5, "q": "Environmentally friendly actions improve feelings of wellbeing for people in ____.", "o": ["Only rich countries", "Only poor countries", "Neither poor nor rich countries", "Both rich and poor countries"], "a": 3}, {"week": 5, "q": "The conscience and values of leaders are referred to as ___.", "o": ["inner voice", "outer voice", "surface voice", "deep voice"], "a": 0}, {"week": 6, "q": "Good character is something that people look for in ___.", "o": ["employees", "students", "friends", "all of their given"], "a": 3}, {"week": 6, "q": "Positive psychology looks for ___ in people.", "o": ["weaknesses of character", "strengths of character", "genetic defects", "genetic strengths"], "a": 1}, {"week": 6, "q": "Seligman distinguishes three aspects of the concept of happiness: ___, commitment and meaning.", "o": ["pleasure", "pain", "conflict", "wisdom"], "a": 0}, {"week": 6, "q": "Forgiveness comes under the virtue of ___.", "o": ["temperance", "courage", "transcendence", "wisdom and knowledge"], "a": 0}, {"week": 6, "q": "The virtue of humanity consists of the following strengths, except ___.", "o": ["kindness", "love", "curiosity", "emotional intelligence"], "a": 2}, {"week": 6, "q": "___ is not a happiness strength.", "o": ["jealousy", "curiosity", "love", "zest"], "a": 0}, {"week": 6, "q": "Creativity and innovation occur at the level of ___.", "o": ["individual", "team", "organization", "all of the given"], "a": 3}, {"week": 6, "q": "Philip Dennert’s concept of a ___ consists of three interconnecting cogs.", "o": ["innovation roadblocks", "creativity challenges", "creative ecosystem", "positive ecosystem"], "a": 2}, {"week": 6, "q": "The deep cognitive engagement in challenging work with the desire to find something new and characterized by facets like distorted time is known as a state of ___.", "o": ["flow", "stream", "eureka", "unconsciousness"], "a": 0}, {"week": 6, "q": "Researcher Teresa Amabile (1988) sees creativity as a process with __ steps.", "o": ["5", "2", "7", "3"], "a": 0}, {"week": 7, "q": "Sustainable wellbeing caters to __ needs.", "o": ["human", "societal", "environmental", "all of the given"], "a": 3}, {"week": 7, "q": "On the outer level, sustainable happiness is about happiness that is ___.", "o": ["good for others but not for the self", "egoistic", "eco-friendly", "none of the given"], "a": 2}, {"week": 7, "q": "Subjective wellbeing often encompasses a set of assessments that measure ___.", "o": ["life satisfaction", "cognitive distortion", "behavioral difficulties", "social conformity"], "a": 0}, {"week": 7, "q": "Wellbeing is not merely personal.", "o": ["True", "False"], "a": 0}, {"week": 7, "q": "Hedonic wellbeing comes with the built-in limitation of hedonic ___.", "o": ["capacity", "cycle", "treadmill", "space"], "a": 2}, {"week": 7, "q": "In the HDLV approach, wellbeing on each dimension of ___ can be either hedonic or eudaimonic, or both.", "o": ["pain", "pleasure", "subjective wellbeing", "need satisfaction"], "a": 3}, {"week": 7, "q": "Loving means being ethical.", "o": ["True", "False"], "a": 0}, {"week": 7, "q": "Being is largely about ___.", "o": ["self-actualization", "being true to one’s inner calling", "flourishing", "all of the given"], "a": 3}, {"week": 7, "q": "Which of the following is not a resource under material wellbeing.", "o": ["food", "love", "income", "assets"], "a": 1}, {"week": 7, "q": "In India, the ___ scheme addresses the challenges faced in achieving good health and wellbeing.", "o": ["Pradhan Mantri Jan Arogya Yojana", "Swachh Bharat Abhiyan", "Jal Jeevan Mission", "Mission Indradhanush"], "a": 0}, {"week": 8, "q": "ESR has to be understood as an integral part of quality education, inherent in the concept of ___.", "o": ["childhood learning", "adolescent training", "experiential learning", "lifelong learning"], "a": 3}, {"week": 8, "q": "Which of the following is not true about ESD?", "o": ["It creates teacher-centered teaching settings", "It integrates contents like climate change into curriculum", "It is holistic", "It is transformative"], "a": 0}, {"week": 8, "q": "ESD asks for ___.", "o": ["formal learning only", "informal learning only", "neither formal not informal learning", "linked formal and informal learning"], "a": 3}, {"week": 8, "q": "ESD is explicitly recognized in the SDGs as part of Target __ of the SDG in education.", "o": ["4.7", "4.1", "4.2", "4.9"], "a": 0}, {"week": 8, "q": "Mobilizing and empowering __ is a priority action area for ESD.", "o": ["educators", "policymakers", "entrepreneurz", "youth"], "a": 3}, {"week": 8, "q": "___ education is the main thematic focus of ESD as it helps people understand and address the impacts of the climate crisis.", "o": ["Climate change", "Global warming", "Deforestation", "Poverty"], "a": 0}, {"week": 8, "q": "Organizations are striving for sustainability by ___.", "o": ["producing better goods and services", "ignoring consumer demands", "prioritising profitability over everything", "none of the given"], "a": 0}, {"week": 8, "q": "The role of organizational management for sustainability is majorly ___.", "o": ["ignorance", "manipulation", "coercion", "motivation"], "a": 3}, {"week": 8, "q": "Publication of a CSR reports is often a part of ___ level in corporate sustainability.", "o": ["value", "surface", "underlying", "core"], "a": 1}, {"week": 8, "q": "The social justice agenda of education highlights the issue of ___.", "o": ["power and politics", "change management", "human resource and supply chain management", "no"], "a": 0}];
+
+let filtered = [...allQuestions];
+let current = 0;
+let answers = {};
+let reviews = new Set();
+let submitted = new Set();
+
+function applyFilter() {
+  const val = document.getElementById('weekFilter').value;
+  filtered = val === 'all' ? [...allQuestions] : allQuestions.filter(x => x.week === Number(val));
+  current = 0;
+  render();
+}
+
+function render() {
+  const item = filtered[current];
+  const total = filtered.length;
+  document.getElementById('progressText').textContent = `Question ${current + 1} of ${total}`;
+  document.getElementById('progressBar').style.width = `${((current + 1) / total) * 100}%`;
+  document.getElementById('progressPct').textContent = `${Math.round(((current + 1) / total) * 100)}%`;
+  document.getElementById('weekBadge').textContent = `Week ${item.week}`;
+  document.getElementById('paletteWeek').textContent = document.getElementById('weekFilter').value === 'all' ? 'ALL' : `WEEK ${item.week}`;
+  document.getElementById('questionText').textContent = `${current + 1}. ${item.q}`;
+
+  const key = getKey(item);
+  const selected = answers[key];
+  const options = document.getElementById('options');
+  options.innerHTML = '';
+
+  item.o.forEach((opt, i) => {
+    const letters = ['A','B','C','D'];
+    const div = document.createElement('button');
+    div.type = 'button';
+
+    const isSelected = selected === i;
+    const isSubmitted = submitted.has(key);
+    const isCorrectOption = i === item.a;
+    const isWrongSelected = isSubmitted && isSelected && !isCorrectOption;
+
+    let cardClass = 'option-card w-full text-left border rounded-xl p-4 flex items-center gap-4 transition-all ';
+    let letterClass = 'w-10 h-10 rounded-full border flex items-center justify-center font-bold flex-shrink-0 ';
+
+    if (isSubmitted && isCorrectOption) {
+      cardClass += 'border-green-500 bg-green-50 ring-1 ring-green-400';
+      letterClass += 'bg-green-600 text-white border-green-600';
+    } else if (isWrongSelected) {
+      cardClass += 'border-red-500 bg-red-50 ring-1 ring-red-400';
+      letterClass += 'bg-red-600 text-white border-red-600';
+    } else if (isSelected) {
+      cardClass += 'border-blue-600 bg-blue-100 ring-2 ring-blue-400';
+      letterClass += 'bg-blue-600 text-white border-blue-600';
+    } else {
+      cardClass += 'border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50';
+      letterClass += 'bg-slate-50 text-slate-700 border-slate-300';
+    }
+
+    div.className = cardClass;
+    div.disabled = isSubmitted;
+    div.onclick = () => selectAnswer(i);
+    div.innerHTML = `<span class="${letterClass}">${letters[i]}</span><span class="font-medium">${escapeHtml(opt)}</span>`;
+    options.appendChild(div);
+  });
+
+  const feedback = document.getElementById('feedback');
+  const submitBtn = document.getElementById('submitAnswerBtn');
+
+  if (submitted.has(key)) {
+    const isCorrect = selected === item.a;
+    feedback.className = `mt-5 rounded-xl border p-4 ${isCorrect ? 'bg-green-50 border-green-300 text-green-800' : 'bg-red-50 border-red-300 text-red-800'}`;
+    feedback.innerHTML = isCorrect
+      ? `✓ <strong>Correct Answer!</strong><div class="mt-1">Answer: <strong>${escapeHtml(item.o[item.a])}</strong></div>`
+      : `✗ <strong>Incorrect Answer!</strong><div class="mt-1">Correct Answer: <strong>${String.fromCharCode(65 + item.a)}. ${escapeHtml(item.o[item.a])}</strong></div>`;
+    feedback.classList.remove('hidden');
+    submitBtn.disabled = true;
+    submitBtn.className = 'px-6 py-3 rounded-xl bg-slate-300 text-slate-500 font-semibold cursor-not-allowed';
+  } else {
+    feedback.className = 'hidden';
+    feedback.innerHTML = '';
+    submitBtn.disabled = selected === undefined;
+    submitBtn.className = selected === undefined
+      ? 'px-6 py-3 rounded-xl bg-slate-300 text-slate-500 font-semibold cursor-not-allowed'
+      : 'px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700';
+  }
+
+  const reviewBtn = document.getElementById('reviewBtn');
+  reviewBtn.textContent = reviews.has(key) ? '★ Remove Review' : '☆ Mark for Review';
+  reviewBtn.className = reviews.has(key)
+    ? 'px-4 py-2 rounded-xl border border-orange-300 bg-orange-50 text-orange-700 text-sm font-medium'
+    : 'px-4 py-2 rounded-xl border border-slate-200 hover:border-blue-400 hover:text-blue-700 text-sm font-medium';
+
+  document.getElementById('nextBtn').textContent = current === total - 1 ? 'Finish →' : 'Next →';
+  updateStats();
+  renderPalette();
+}
+
+function getKey(item) { return allQuestions.indexOf(item); }
+
+function selectAnswer(i) {
+  const key = getKey(filtered[current]);
+  if (submitted.has(key)) return;
+  answers[key] = i;
+  render();
+}
+
+function submitAnswer() {
+  const item = filtered[current];
+  const key = getKey(item);
+  const selected = answers[key];
+
+  if (selected === undefined) {
+    alert('Please select an option first.');
+    return;
+  }
+
+  submitted.add(key);
+  render();
+}
+
+function clearAnswer() {
+  const key = getKey(filtered[current]);
+  if (submitted.has(key)) return;
+  delete answers[key];
+  render();
+}
+
+function toggleReview() {
+  const key = getKey(filtered[current]);
+  reviews.has(key) ? reviews.delete(key) : reviews.add(key);
+  render();
+}
+
+function nextQuestion() {
+  if (current < filtered.length - 1) {
+    current++;
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  } else {
+    submitTest();
+  }
+}
+
+function previousQuestion() {
+  if (current > 0) {
+    current--;
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+}
+
+function goTo(i) {
+  current = i;
+  render();
+}
+
+function renderPalette() {
+  const p = document.getElementById('palette');
+  p.innerHTML = '';
+  filtered.forEach((item, i) => {
+    const key = getKey(item);
+    const b = document.createElement('button');
+    b.textContent = i + 1;
+    let cls = 'palette-btn h-10 rounded-xl border text-sm font-semibold ';
+    if (i === current) cls += 'bg-blue-600 text-white border-blue-600';
+    else if (reviews.has(key)) cls += 'bg-orange-400 text-white border-orange-400';
+    else if (submitted.has(key)) cls += 'bg-emerald-500 text-white border-emerald-500';
+    else if (answers[key] !== undefined) cls += 'bg-blue-400 text-white border-blue-400';
+    else cls += 'bg-white text-slate-700 border-slate-200';
+    b.className = cls;
+    b.onclick = () => goTo(i);
+    p.appendChild(b);
+  });
+}
+
+function updateStats() {
+  let attempted = Object.keys(answers).length;
+  let correct = 0;
+  Object.keys(answers).forEach(k => {
+    if (answers[k] === allQuestions[k].a) correct++;
+  });
+  const total = filtered.length;
+  const filteredKeys = new Set(filtered.map(getKey));
+  attempted = [...Object.keys(answers)].filter(k => filteredKeys.has(Number(k))).length;
+  correct = [...Object.keys(answers)].filter(k => filteredKeys.has(Number(k)) && answers[k] === allQuestions[k].a).length;
+  const wrong = attempted - correct;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('attemptedCount').textContent = attempted;
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('wrongCount').textContent = wrong;
+  document.getElementById('unattemptedCount').textContent = total - attempted;
+}
+
+function submitTest() {
+  const total = filtered.length;
+  const attempted = filtered.filter(item => answers[getKey(item)] !== undefined).length;
+  const correct = filtered.filter(item => answers[getKey(item)] === item.a).length;
+  const wrong = attempted - correct;
+  if (attempted < total && !confirm(`You have attempted ${attempted} of ${total} questions. Submit anyway?`)) return;
+  filtered.forEach(item => { if (answers[getKey(item)] !== undefined) submitted.add(getKey(item)); });
+  document.getElementById('resultScore').textContent = `${correct}/${total}`;
+  document.getElementById('resultPct').textContent = `${Math.round(correct / total * 100)}%`;
+  document.getElementById('resultCorrect').textContent = correct;
+  document.getElementById('resultWrong').textContent = wrong;
+  document.getElementById('resultModal').classList.remove('hidden');
+  document.getElementById('resultModal').classList.add('flex');
+  render();
+}
+
+function showResults() { submitTest(); }
+function closeResults() {
+  document.getElementById('resultModal').classList.add('hidden');
+  document.getElementById('resultModal').classList.remove('flex');
+}
+
+function resetTest() {
+  answers = {};
+  reviews = new Set();
+  submitted = new Set();
+  current = 0;
+  render();
+}
+
+function toggleDark() {
+  document.body.classList.toggle('bg-slate-950');
+  document.body.classList.toggle('text-slate-100');
+  document.querySelectorAll('.bg-white').forEach(el => el.classList.toggle('bg-slate-900'));
+  document.querySelectorAll('.text-slate-900').forEach(el => el.classList.toggle('text-slate-100'));
+}
+
+function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextQuestion();
+  if (e.key === 'ArrowLeft') previousQuestion();
+});
+
+render();
+</script>
+</body>
+</html>
